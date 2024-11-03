@@ -31,8 +31,6 @@ def new_thread():
     require_login()
 
     title = request.form["title"]
-    if title == "":
-        title = "(empty)"
     content = request.form["content"]
     if len(title) > 100 or len(content) > 5000:
         abort(403)
