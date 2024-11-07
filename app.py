@@ -110,7 +110,7 @@ def login():
     if request.method == "GET":
         return render_template("login.html")
 
-    else:
+    if request.method == "POST":
         username = request.form["username"]
         password = request.form["password"]
 
