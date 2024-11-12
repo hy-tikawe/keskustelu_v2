@@ -14,12 +14,12 @@ def index():
     threads = forum.get_threads()
     return render_template("index.html", threads=threads)
 
-@app.route("/thread/<int:id>")
-def show_thread(id):
-    thread = forum.get_thread(id)
+@app.route("/thread/<int:thread_id>")
+def show_thread(thread_id):
+    thread = forum.get_thread(thread_id)
     if not thread:
         abort(404)
-    messages = forum.get_messages(id)
+    messages = forum.get_messages(thread_id)
     return render_template("thread.html", thread=thread, messages=messages)
 
 @app.route("/new_thread", methods=["POST"])
@@ -51,11 +51,11 @@ def new_message():
         abort(403)
     return redirect("/thread/" + str(thread_id))
 
-@app.route("/edit/<int:id>", methods=["GET", "POST"])
-def edit_message(id):
+@app.route("/edit/<int:message_id>", methods=["GET", "POST"])
+def edit_message(message_id):
     require_login()
 
-    message = forum.get_message(id)
+    message = forum.get_message(message_id)
     if not message or message["user_id"] != session["user_id"]:
         abort(403)
 
@@ -69,11 +69,11 @@ def edit_message(id):
         forum.update_message(message["id"], content)
         return redirect("/thread/" + str(message["thread_id"]))
 
-@app.route("/remove/<int:id>", methods=["GET", "POST"])
-def remove_message(id):
+@app.route("/remove/<int:message_id>", methods=["GET", "POST"])
+def remove_message(message_id):
     require_login()
 
-    message = forum.get_message(id)
+    message = forum.get_message(message_id)
     if not message or message["user_id"] != session["user_id"]:
         abort(403)
 
